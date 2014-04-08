@@ -137,6 +137,7 @@ class View
 
     public static function table($body, array $attributes = [])
     {
+        $body || $body = self::createTag('th', 'no data', ['class' => 'no-data']);
         return self::createTag('table', $body, $attributes);
     }
 

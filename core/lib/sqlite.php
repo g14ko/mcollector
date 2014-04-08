@@ -22,6 +22,7 @@ class Sqlite
         if (!self::$db)
         {
             self::openConnection();
+           !self::getTables() && self::init();
         }
         return forward_static_call_array([__CLASS__, $method], $params);
     }

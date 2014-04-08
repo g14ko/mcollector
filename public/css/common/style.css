@@ -1,0 +1,97 @@
+body {
+    font: 14px/16px Helvetica, Arial, 'sans-serif';
+    color: #555;
+    background: #f5f5f5 url('../../img/gray_jean.png');
+}
+
+a {
+    color: #666;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#wrapped {
+    display: table;
+    width: 100%;
+    /*margin: 0; padding: 5px; border: 0;*/
+}
+
+#aside {
+    float: left;
+    padding: 3px;
+}
+
+#main {
+    padding: 3px;
+
+}
+
+#content {
+    background-color: rgba(255, 255, 255, .3);
+}
+
+#content table {
+    width: 100%;
+}
+
+th {
+    vertical-align: middle;
+}
+
+th.server {
+    width: 120px;
+}
+
+#servers td.server {
+    width: 100px;
+}
+
+#servers td.systemmemorykilobyte span.systemmemorykilobyte {
+    float: right;
+}
+
+#servers td.systemmemorypercent span.systemmemorypercent {
+    float: left;
+}
+
+/* services */
+#services th.file, #services th.process, #services th.filesystem, #services th.directory {
+    width: 200px;
+}
+
+#services th.monitor, #services th.action {
+    width: 70px;
+}
+
+#services th.status {
+    width: 70px;
+}
+
+/* color styles */
+
+span.green {
+    color: rgba(0, 155, 0, .7);
+}
+
+span.blue {
+    color: rgba(0, 0, 255, .7);
+}
+
+span.orange {
+    color: rgba(235, 85, 0, .7);
+}
+
+span.red {
+    color: rgba(255, 0, 0, .7);
+}
+
+.hidden {
+    display: none;
+}
+
+.warning {
+    width: 16px;
+    height: 16px;
+    margin-bottom: -3px;
+    padding-right: 8px;
+}

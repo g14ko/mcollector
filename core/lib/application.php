@@ -73,7 +73,7 @@ class Application
         {
             if ($alias = self::extractAlias($server))
             {
-                self::correctDateTime($server);
+                self::correctTimeCollected($server);
                 self::addServerLink($server, $alias);
                 self::addUpdateLink($server, $alias);
             }
@@ -255,37 +255,9 @@ class Application
         );
     }
 
-    // todo: move and little refactoring this method
-    private static function correctDateTime(array &$server)
+    private static function correctTimeCollected(array &$server, $oldKey = 'collected_sec', $newKey = 'collected')
     {
-        $key = 'collected_sec';
-        if (array_key_exists($key, $server) && !empty($server[$key]))
-        {
-            $datetime = new \DateTime();
-            $datetime->setTimestamp($server[$key]);
-            $diff = $datetime->diff(new \DateTime('now'));
-            $days = $diff->days;
-            $hours = $diff->h;
-            $minutes = $diff->i;
-            $seconds = $diff->s;
-            $interval = null;
-            switch (true)
-            {
-                case !empty($days):
-                    $interval .= $days . 'd ';
-                case !empty($hours):
-                    $interval .= $hours . 'h ';
-                case !empty($minutes):
-                    $interval .= $minutes . 'm ';
-                case !empty($seconds):
-                    $interval .= $seconds . 's ';
-            }
-            $server['collected'] = !empty($interval) ? $interval . 'ago' : 'load data';
-        }
-        else
-        {
-            $server['collected'] = 'unknown';
-        }
+        $server[$newKey] = !empty($server[$oldKey]) ? DateTime::getInterval($server[$oldKey]) : 'not specified time collected';
     }
 
     private static function extractAlias(array $server)

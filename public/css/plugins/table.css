@@ -44,8 +44,9 @@ td:not(.separator) {
 }
 
 td:first-child,
-th:first-child {
-    text-align: left
+th:first-child,
+th.process {
+    text-align: left;
 }
 
 td.server,
@@ -69,7 +70,7 @@ td.host:first-letter {
 }
 
 .inactive {
-    opacity: .4;
+    opacity: .4 !important;
 }
 
 th.actions, td.actions {
@@ -101,7 +102,7 @@ td.status {
 }
 
 span.status span:not(.bubble) {
-    text-shadow: 0 0 1px rgba(255, 255, 255, .7), 0px 0px 3px rgba(255, 255, 255, .3);
+    text-shadow: 0 0 1px rgba(255, 255, 255, .7), 0 0 3px rgba(255, 255, 255, .3);
 }
 
 tr.warning {

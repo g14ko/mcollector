@@ -1,0 +1,19 @@
+/* blackout */
+#blackout {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    visibility: hidden;
+    /*background-color: rgba(0, 0, 0, 0.3);*/
+    /* background */
+    background-image: url('../../img/load.gif');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgb(0, 0, 0);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)"; /* IE 8 */
+    filter: alpha(opacity=30); /* IE 5-7 */
+    -moz-opacity: 0.3; /* Netscape */
+    -khtml-opacity: 0.3; /* Safari 1.x */
+    opacity: .3; /* Good browsers */
+}

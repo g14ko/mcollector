@@ -1,0 +1,25 @@
+.bubble {
+    position: absolute;
+    background-color: rgba(255, 255, 255, .9);
+    margin: 0;
+    margin-top: -30px;
+    white-space: nowrap;
+    padding: 3px 7px;
+    text-align: center;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0px 0 3px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 0px 0 3px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0 3px rgba(0, 0, 0, 0.25);
+}
+
+.bubble:after {
+    position: absolute;
+    display: block;
+    content: "";
+    border-color: rgba(255, 255, 255, .9) transparent transparent transparent;
+    border-style: solid;
+    border-width: 10px;
+    bottom: -20px;
+    right: 1em;
+}

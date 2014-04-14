@@ -1,0 +1,91 @@
+/*custom font*/
+@import url(http://fonts.googleapis.com/css?family=Merriweather+Sans);
+
+#navigate {
+    display: block;
+    font-family: 'Merriweather Sans', arial, verdana;
+    line-height: 24px;
+    padding: 5px;
+}
+
+ul {
+    list-style: none;
+}
+
+#menu {
+    overflow: hidden;
+    width: 100%;
+}
+
+#menu li:first-letter,
+#menu li a:first-letter {
+    text-transform: uppercase;
+}
+
+#menu li {
+    float: left;
+}
+
+#menu a {
+    position: relative;
+    float: left;
+    padding: 4px 8px 4px 20px;
+    text-decoration: none;
+    font-weight: normal;
+    background-color: rgba(255, 255, 255, .3);
+    background-image: linear-gradient(to right, rgba(255, 255, 255, .3), rgba(255, 255, 255, .9));
+}
+
+#menu li:last-child {
+    padding: 4px 8px 4px 20px;
+    border-radius: 5px 0 0 5px;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, .9);
+}
+
+#menu li:first-child a {
+    padding-left: 8px;
+    border-radius: 5px 0 0 5px;
+}
+
+#menu a:hover {
+    background: rgba(255, 255, 255, .9);
+}
+
+#menu a::after,
+#menu a::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    margin-top: -1.5em;
+    border-top: 1.5em solid transparent;
+    border-bottom: 1.5em solid transparent;
+    border-left: 1em solid;
+    right: -1em;
+}
+
+#menu a::after {
+    z-index: 2;
+    border-left-color: rgba(255, 255, 255, .9);
+}
+
+#menu a::before {
+    border-left-color: rgba(255, 255, 255, .1);
+    right: -1.1em;
+    z-index: 1;
+}
+
+#menu a:hover::after {
+    border-left-color: rgba(255, 255, 255, .9);
+}
+
+#menu .current,
+#menu .current:hover {
+    font-weight: bold;
+    background: none;
+}
+
+#menu .current::after,
+#menu .current::before {
+    content: normal;
+}
+

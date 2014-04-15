@@ -225,8 +225,7 @@ class View
 
     public static function render(array $variables)
     {
-        $layout = self::getLayout();
-        echo self::renderFile($layout, $variables);
+         return self::renderFile(self::getLayout(), $variables);
     }
 
     private static function getLayout()
@@ -249,7 +248,7 @@ class View
 
     private static function getPath($filename)
     {
-        return AutoLoader::getRootDirectory() . self::VIEW_DIR . DIRECTORY_SEPARATOR . $filename . self::TPL_EXT;
+        return AutoLoader::getCoreDirectory() . self::VIEW_DIR . DIRECTORY_SEPARATOR . $filename . self::TPL_EXT;
     }
 
 }

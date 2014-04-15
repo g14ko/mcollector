@@ -48,7 +48,7 @@ class AutoLoader
      */
     private static function setDebugMode()
     {
-        if (DEBUG_MODE)
+        if (DEBUG)
         {
             ini_set('display_errors', true);
             ini_set('display_startup_errors', true);

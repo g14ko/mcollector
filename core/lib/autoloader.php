@@ -9,109 +9,44 @@ namespace lib;
 
 class AutoLoader
 {
-    const ROOT = 0;
+    // name the method for register auto load
+    const AUTO_LOAD = 'load';
+    // indexes part of file path
+    const CORE = 0;
     const PATH = 1;
     const NAME = 2;
     const EXT = 3;
-    const AUTO_LOAD = 'load';
+    // default time zone
+    const TIMEZONE = 'Europe/Kiev';
+    // default time zone
+    const CORE_DIR = 'core';
+    // default file extension
+    const PHP_EXT = '.php';
+    // core directory
+    private static $coreDir = null;
+    // file path
+    private static $filepath = [];
 
-
-    private static $colon = ':';
-    private static $slash = '/';
-    private static $backSlash = '\\';
-    private static $rootDir = '';
-    private static $phpExt = '.php';
-    private static $timeZone = 'Europe/Kiev';
-
-    private static $file = [];
-
-    public static function getRootDirectory()
-    {
-        return self::$rootDir;
-    }
-
-    public static function load($fileNameSpace)
-    {
-        self::initPath();
-        self::parseNameSpace($fileNameSpace);
-        $file = self::getFile();
-        if (self::fileExists($file))
-        {
-            require_once($file);
-        }
-    }
-
-    public static function initPath()
-    {
-        self::$file = [
-            self::ROOT => self::$rootDir,
-            self::EXT  => self::$phpExt
-        ];
-    }
-
+    /**
+     * Инициализация авто загрузки
+     *
+     * @param $dir Публичная директория с индексным файлом
+     * @return void
+     */
     public static function init($dir)
     {
-        self::debugMode();
+        self::setDebugMode();
         self::setTimeZone();
-        self::$rootDir = realpath($dir . DIRECTORY_SEPARATOR . '../core') . DIRECTORY_SEPARATOR;
+        self::setCoreDirectory($dir);
         self::register();
     }
 
-    private static function setTimeZone()
-    {
-        \date_default_timezone_set(self::$timeZone);
-    }
-
-    private static function parseNameSpace($nameSpace)
-    {
-        if (strpos($nameSpace, self::$backSlash) !== false)
-        {
-            $parsedNameSpace = explode(self::$backSlash, $nameSpace);
-            self::$file[self::NAME] = strtolower(array_pop($parsedNameSpace));
-            self::$file[self::PATH] = implode(self::$slash, $parsedNameSpace) . self::$slash;
-        }
-        else
-        {
-            self::$file[self::NAME] = strtolower($nameSpace);
-        }
-    }
-
-    private static function fileExists($file)
-    {
-        if (file_exists($file))
-        {
-            self::$file = $file;
-            return true;
-        }
-        return false;
-    }
-
-    private static function getFile()
-    {
-        ksort(self::$file);
-        return implode('', self::$file);
-    }
-
-    private static function getPathToFile($fileName)
-    {
-        if (strpos($fileName, self::$backSlash) !== false)
-        {
-            $fileName = implode(self::$slash, explode(self::$backSlash, $fileName));
-        }
-        return strtolower($fileName);
-    }
-
-    private static function doubleColon()
-    {
-        return self::$colon . self::$colon;
-    }
-
-    private static function register()
-    {
-        \spl_autoload_register(__CLASS__ . self::doubleColon() . self::AUTO_LOAD);
-    }
-
-    private static function debugMode()
+    /**
+     * Установить уровень вывода ошибок
+     *
+     * @return void
+     */
+    private static function setDebugMode()
     {
         if (DEBUG_MODE)
         {
@@ -119,6 +54,121 @@ class AutoLoader
             ini_set('display_startup_errors', true);
             error_reporting(E_ALL);
         }
+    }
+
+    /**
+     * Задать часовой пояс
+     *
+     * @param string $timezone Название часового пояса
+     * @return void
+     */
+    private static function setTimeZone($timezone = self::TIMEZONE)
+    {
+        \date_default_timezone_set($timezone);
+    }
+
+    /**
+     * Задать директорию с ядром проекта
+     *
+     * @param string $dir Путь к публичной директории
+     * @param string $coreDir Название директории с ядром проекта
+     * @return void
+     */
+    private static function setCoreDirectory($dir, $coreDir = self::CORE_DIR)
+    {
+        self::$coreDir = realpath($dir . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $coreDir) . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * Получить директорию с ядром проекта
+     *
+     * @return string Директория с ядром проекта
+     * @return void
+     */
+    public static function getCoreDirectory()
+    {
+        return self::$coreDir;
+    }
+
+    /**
+     * Зарегистрировать метод, реализующий функцию авто загрузки
+     *
+     * @return void
+     */
+    private static function register()
+    {
+        \spl_autoload_register(__CLASS__ . '::' . self::AUTO_LOAD);
+    }
+
+    /**
+     * Метод для авто загрузки
+     *
+     * @param string $fileNameSpace Пространство имен файла
+     * @return void
+     */
+    public static function load($fileNameSpace)
+    {
+        self::initFilePath();
+        self::parseNameSpace($fileNameSpace);
+        $file = self::getFilePath();
+        self::fileExists($file) && require_once($file);
+    }
+
+    /**
+     * Инициализировать путь к файлу
+     *
+     * @param string $extension Расширение файла, по умолчанию - .php
+     * @return void
+     */
+    private static function initFilePath($extension = self::PHP_EXT)
+    {
+        self::$filepath = [
+            self::CORE => self::getCoreDirectory(),
+            self::EXT  => $extension
+        ];
+    }
+
+    /**
+     * Разобрать пространство имен и задать путь к файлу
+     *
+     * @param string $nameSpace Пространство имен
+     * @return void
+     */
+    private static function parseNameSpace($nameSpace)
+    {
+        if (strpos($nameSpace, '\\') !== false)
+        {
+            $parsedNameSpace = explode('\\', $nameSpace);
+            self::$filepath[self::NAME] = strtolower(array_pop($parsedNameSpace));
+            self::$filepath[self::PATH] = implode(DIRECTORY_SEPARATOR, $parsedNameSpace) . DIRECTORY_SEPARATOR;
+        }
+        else
+        {
+            self::$filepath[self::NAME] = strtolower($nameSpace);
+        }
+    }
+
+    /**
+     * Собрать и вернуть путь к файлу
+     *
+     * @return string Путь к файлу
+     * @return void
+     */
+    private static function getFilePath()
+    {
+        ksort(self::$filepath);
+        return implode('', self::$filepath);
+    }
+
+    /**
+     * Сущевствует ли файл по указаному пути
+     *
+     * @param string $file Путь к файлу
+     * @return bool Файл сущевствует, true - да, false - нет
+     */
+    private static function fileExists($file)
+    {
+        return file_exists($file);
     }
 
 }

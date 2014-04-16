@@ -17,6 +17,8 @@ use model\collector\server\system\Swap as swap;
 
 class System extends model
 {
+    use \component\Model;
+
     const TABLE = 'system';
 
     private static $data = [];
@@ -28,29 +30,15 @@ class System extends model
         'model\collector\server\system\Swap'   => swap::TABLE
     ];
 
-    public static function saveAll(array $systems)
-    {
-        self::cleanOldData(self::TABLE, self::UPDATE);
-        foreach ($systems as $system)
-        {
-            self::save($system);
-        }
-    }
-
     public static function save(xml $service)
     {
         self::setPrimaryKey(self::$data);
+        self::setName(self::$data, $service);
         self::setForeignKeys(
             self::$data,
             self::saveChild(self::TABLE, self::$child, self::$data, self::extractByProperty(self::TABLE, $service))
         );
-        self::setName(self::$data, $service);
         self::saveToDB(self::TABLE, self::getFields(self::SAVE, self::TABLE), $service, self::$data);
-    }
-
-    public static function addSelect($for, array &$select)
-    {
-        $select = array_merge($select, self::getSelect($for));
     }
 
     public static function getSelect($for, array $select = [])

@@ -13,6 +13,8 @@ use \SimpleXMLElement as xml;
 
 class Load extends model
 {
+    use \component\Model;
+
     const TABLE = 'systemload';
 
     private static $data = [];
@@ -28,12 +30,7 @@ class Load extends model
         );
     }
 
-    public static function addSelect($for, array &$select)
-    {
-        $select = array_merge($select, self::getSelect($for));
-    }
-
-    private static function getSelect($for)
+    public static function getSelect($for)
     {
         return self::buildSelect(
                    self::TABLE,

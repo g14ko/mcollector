@@ -10,10 +10,11 @@ namespace model\collector\server;
 use lib\Model as model;
 use model\collector\server\filesystem\Block as block;
 use model\collector\server\filesystem\Inode as inode;
-use \SimpleXMLElement as xml;
 
 class FileSystem extends model
 {
+    use \component\Model;
+
     const TABLE = 'filesystem';
 
     private static $data = [];
@@ -27,34 +28,5 @@ class FileSystem extends model
         self::STATUS_RUNNING => 'accessible',
         self::STATUS_DOES_NOT_EXISTS => 'not accessible'
     ];
-
-    public static function saveAll(array $filesystems)
-    {
-        self::cleanOldData(self::TABLE, self::UPDATE);
-        foreach ($filesystems as $filesystem)
-        {
-            self::save($filesystem);
-        }
-    }
-
-    public static function save(xml $service)
-    {
-        self::setPrimaryKey(self::$data);
-        self::setName(self::$data, $service);
-        self::setForeignKeys(self::$data, self::saveChild(self::TABLE, self::$child, self::$data, $service));
-        self::saveToDB(self::TABLE, self::getFields(self::SAVE, self::TABLE), $service, self::$data);
-    }
-
-    public static function getSelect($for, array $select = [])
-    {
-        $fields = self::config([$for, self::TABLE, self::SELECT]);
-        self::setChildSelect($for, self::$child, $select, $fields);
-        return array_merge(self::buildSelect(self::TABLE, $fields), $select);
-    }
-
-    public static function getStatus($status)
-    {
-        return self::$statuses[$status];
-    }
 
 }

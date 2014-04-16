@@ -244,6 +244,7 @@ class Server extends model
     {
         foreach (self::$services as $class => $type)
         {
+            self::cleanOldData($class::TABLE, self::UPDATE);
             if ($services = self::extractServicesByType($type))
             {
                 $class::saveAll($services);

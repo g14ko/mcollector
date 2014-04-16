@@ -13,6 +13,8 @@ use \SimpleXMLElement as xml;
 
 class Memory extends model
 {
+    use \component\Model;
+
     const TABLE = 'memory';
 
     private static $data = [];
@@ -23,12 +25,7 @@ class Memory extends model
         self::saveToDB(self::TABLE, self::getFields(self::SAVE, self::TABLE), self::extractByProperty(self::TABLE, $service), self::$data);
     }
 
-    public static function addSelect($for, array &$select)
-    {
-        $select = array_merge($select, self::getSelect($for));
-    }
-
-    private static function getSelect($for)
+    public static function getSelect($for)
     {
         $fields = self::config([$for, self::TABLE, self::SELECT]);
         return self::buildSelect(self::TABLE, $fields, [[self::ID, process::TABLE, self::getNameId(self::TABLE)]]);

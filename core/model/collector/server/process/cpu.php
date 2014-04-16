@@ -13,6 +13,8 @@ use \SimpleXMLElement as xml;
 
 class Cpu extends model
 {
+    use \component\Model;
+
     const TABLE = 'cpu';
 
     private static $data = [];
@@ -23,12 +25,7 @@ class Cpu extends model
         self::saveToDB(self::TABLE, self::getFields(self::SAVE, self::TABLE), self::extractByProperty(self::TABLE, $service), self::$data);
     }
 
-    public static function addSelect($for, array &$select)
-    {
-        $select = array_merge($select, self::getSelect($for));
-    }
-
-    private static function getSelect($for)
+    public static function getSelect($for)
     {
         return self::buildSelect(
                    self::TABLE,

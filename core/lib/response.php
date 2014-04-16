@@ -37,7 +37,6 @@ class Response
             {
                 $file = implode('', $file);
                 (!$append) ? file_put_contents($file, $xml, LOCK_EX) : file_put_contents($file, $xml, FILE_APPEND | LOCK_EX);
-                chmod($file, 0755);
             }
         }
     }

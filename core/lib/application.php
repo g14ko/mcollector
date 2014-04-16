@@ -67,7 +67,21 @@ class Application
     public function run()
     {
         $params = request::getParams();
-        !self::execAction($params) && self::execute($this, $params);
+
+        try
+        {
+            !self::execAction($params) && self::execute($this, $params);
+        }
+        catch (\Exception $e)
+        {
+            echo view::render(
+                     [
+                         'code'    => $e->getCode(),
+                         'message' => $e->getMessage()
+                     ],
+                     'error'
+            );
+        }
     }
 
     /* internal actions */

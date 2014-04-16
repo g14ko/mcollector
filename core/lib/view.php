@@ -22,11 +22,6 @@ class View
     const ATTR_CLASS = 'class';
     const ATTR_TITLE = 'title';
 
-    public static function drawWrapper($id, $content)
-    {
-        return self::createTag('div', $content, ['id' => $id]);
-    }
-
     public static function getServiceAttributes($service)
     {
         return [self::ATTR_ID => $service];
@@ -51,18 +46,6 @@ class View
     private static function getActionClass($action, $existsUrl, array $classes = [])
     {
         return implode(' ', [$action, self::LINK_ACTION, !$existsUrl ? self::LINK_INACTIVE : self::LINK_ACTIVE]);
-    }
-
-    public static function drawBasicTable($id, array $rows)
-    {
-        $body = '';
-        $headers = array_keys($rows[0]);
-        $body .= self::drawRow(array_combine($headers, $headers), true);
-        foreach ($rows as $row)
-        {
-            $body .= self::drawRow($row);
-        }
-        return self::createTag('table', $body, ['id' => $id]);
     }
 
     public static function th($data, array $attributes = [])
@@ -223,16 +206,18 @@ class View
         return $tag;
     }
 
-    public static function render(array $variables)
+    public static function render(array $variables, $layout = self::LAYOUT)
     {
-         return self::renderFile(self::getLayout(), $variables);
+        return self::renderFile($layout, $variables);
     }
 
-    private static function getLayout()
-    {
-        return self::LAYOUT;
-    }
-
+    /**
+     * Отрендерить файл
+     *
+     * @param  string $fileName Название файла
+     * @param array   $vars Массив переменных
+     * @return string Файл в виде строки, если нет файла - null
+     */
     private static function renderFile($fileName, array $vars)
     {
         $file = self::getPath($fileName);
@@ -243,7 +228,7 @@ class View
             include($file);
             return ob_get_clean();
         }
-        return false;
+        return null;
     }
 
     private static function getPath($filename)

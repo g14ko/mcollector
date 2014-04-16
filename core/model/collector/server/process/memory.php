@@ -15,20 +15,19 @@ class Memory extends model
 {
     use \component\Model;
 
+    const PARENT = 'process';
     const TABLE = 'memory';
 
     private static $data = [];
 
     public static function save($id, xml $service)
     {
-        self::setId(self::$data, $id);
-        self::saveToDB(self::TABLE, self::getFields(self::SAVE, self::TABLE), self::extractByProperty(self::TABLE, $service), self::$data);
+        self::childSave($id, $service);
     }
 
     public static function getSelect($for)
     {
-        $fields = self::config([$for, self::TABLE, self::SELECT]);
-        return self::buildSelect(self::TABLE, $fields, [[self::ID, process::TABLE, self::getNameId(self::TABLE)]]);
+        return self::getChildSelect($for);
     }
 
 }

@@ -20,7 +20,9 @@ use \SimpleXMLElement as xml;
 
 class Server extends model
 {
-    const TABLE = self::SERVER;
+    use \component\Model;
+
+    const TABLE = 'server';
 
     private static $data = [];
 
@@ -81,7 +83,7 @@ class Server extends model
         {
             if ($select = self::select(self::buildSelect($table, $fields), $where))
             {
-                !self::isSystemTable($table) ? : $select[0][self::NAME] = $server;
+                self::isSystemTable($table) && $select[0][self::NAME] = $server;
                 $services = array_merge($services, $select);
             }
         }
@@ -92,11 +94,6 @@ class Server extends model
     {
         $for .= '-' . self::SERVERS;
         return array_map([__CLASS__, 'addCountServices'], collector::getServers($for));
-    }
-
-    public static function addSelect($for, array &$select)
-    {
-        $select = array_merge($select, self::getSelect($for));
     }
 
     public static function getSelect($for, array $select = [])

@@ -15,23 +15,19 @@ class Cpu extends model
 {
     use \component\Model;
 
+    const PARENT = 'process';
     const TABLE = 'cpu';
 
     private static $data = [];
 
     public static function save($id, xml $service)
     {
-        self::setId(self::$data, $id);
-        self::saveToDB(self::TABLE, self::getFields(self::SAVE, self::TABLE), self::extractByProperty(self::TABLE, $service), self::$data);
+        self::childSave($id, $service);
     }
 
     public static function getSelect($for)
     {
-        return self::buildSelect(
-                   self::TABLE,
-                   self::config([$for, self::TABLE, self::SELECT]),
-                   [[self::ID, process::TABLE, self::getNameId(self::TABLE)]]
-        );
+        return self::getChildSelect($for);
     }
 
 }

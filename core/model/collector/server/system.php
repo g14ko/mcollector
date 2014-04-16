@@ -54,14 +54,4 @@ class System extends model
                                ]), $select);
     }
 
-    public static function getGroup($for)
-    {
-        return [self::TABLE => self::config([$for, self::TABLE, self::GROUP])];
-    }
-
-    public static function getOrder($for)
-    {
-        return [self::TABLE => self::config([$for, self::TABLE, self::ORDER])];
-    }
-
 }

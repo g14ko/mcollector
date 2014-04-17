@@ -29,10 +29,9 @@ class Config
     // file names for configs
     private static $files = [
         'servers'    => self::SERVERS,
-        'styles'     => self::LAYOUT,
-        'scripts'    => self::LAYOUT,
-        'head'       => self::PAGE,
-        'refresh'    => self::PAGE,
+        'styles'     => self::PAGE,
+        'scripts'    => self::PAGE,
+        'vars'       => self::PAGE,
         'db'         => self::DB,
         'actions'    => self::ACTIONS,
         'select'     => self::SELECT,

@@ -453,7 +453,7 @@ class Application
      */
     private function getTitle()
     {
-        return config::get(['head', 'title']);
+        return config::get(['vars', 'title']);
     }
 
     /**
@@ -463,16 +463,13 @@ class Application
      * <dl>
      *  <dt>(int) interval</dt><dd>Интервал для обновления страницы, в секундах</dd>
      *  <dt>(int) periods</dt><dd>Период для обновления страницы, в секундах</dd>
-     *  <dt>(int) lastModified</dt><dd>Время последнего обновления файла БД, в секундах</dd>
      * </dl>
      */
-    // todo: fixed doc blocks
     private function getJsVariables()
     {
         return [
-            'interval'     => config::get(['refresh', 'interval']) * 1000,
-            'periods'      => config::get(['refresh', 'periods']),
-            'lastModified' => db::lastModifiedDb() * 1000
+            'interval'     => config::get(['vars', 'refresh']) * 1000,
+            'periods'      => config::get(['vars', 'periods'])
         ];
     }
 

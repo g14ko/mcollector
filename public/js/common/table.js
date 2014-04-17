@@ -218,15 +218,6 @@
         return ($(set).parents('div').attr('id') == 'content');
     }
 
-    var getStatusClassByValue = function (value) {
-        switch (true) {
-            case ($.inArray(value, ['accessible', 'running']) != -1):
-                return 'green';
-            case ($.inArray(value, ['not accessible', 'not running']) != -1):
-                return 'red';
-        }
-    }
-
     var collapseTables = function () {
         var me = this;
         var tables = $.cookie('collapse-tables');

@@ -212,7 +212,6 @@
                 var event = this.handle.event.click;
                 $(selector).live(event, function (event) {
                     event.preventDefault();
-                    event.stopPropagation();
                     var table = collapse.table;
                     table.setBySeparator(this);
                     table.shift();

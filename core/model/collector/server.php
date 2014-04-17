@@ -75,7 +75,7 @@ class Server extends model
             self::buildExpression(self::SERVER, '=', $server),
             self::buildExpression(self::UPDATE, '=', self::getStartTimeStamp(), 'and')
         ];
-        if (!empty($service))
+        if(!empty($service))
         {
             array_push($where, self::buildExpression(self::NAME, '=', $service, 'and'));
         }
@@ -118,16 +118,13 @@ class Server extends model
         );
     }
 
-    public static function getPollTime($alias, $field = 'poll')
+    public static function getPollTime($alias)
     {
-        $row = self::select(
-                   self::buildSelect(self::TABLE, [$field]),
-                   [
-                       self::buildExpression(self::ALIAS, '=', $alias),
-                       self::buildExpression(self::UPDATE, '=', (int)collector::getUpdateTimeStamp($alias), 'and')
-                   ]
-        );
-        return !empty($row) ? array_shift($row)[$field] : 0;
+        $updateTime = (int)collector::getUpdateTimeStamp($alias);
+        return self::select(self::buildSelect(self::TABLE, ['poll']), [
+            self::buildExpression(self::ALIAS, '=', $alias),
+            self::buildExpression(self::UPDATE, '=', $updateTime, 'and')
+        ])[0]['poll'];
     }
 
     public static function getServices($alias, $for, array $services = [])

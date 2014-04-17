@@ -8,12 +8,12 @@
     color: rgba(255, 255, 255, .9);
 
     /* box shadow */
-    -moz-box-shadow: 0 0 50 rgba(0, 0, 0, .1) inset;
-    -webkit-box-shadow: 0 0 50 rgba(0, 0, 0, .1) inset;
-    box-shadow: 0 0 50 rgba(0, 0, 0, .1) inset;
+    -moz-box-shadow: 0px 0px 50px rgba(0, 0, 0, .1) inset;
+    -webkit-box-shadow: 0px 0px 50px rgba(0, 0, 0, .1) inset;
+    box-shadow: 0px 0px 50px rgba(0, 0, 0, .1) inset;
 
     /* text shadow*/
-    text-shadow: 0 0 3px rgba(155, 155, 155, .7), 0 0 5px rgba(155, 155, 155, .8);
+    text-shadow: 0px 0px 3px rgba(155, 155, 155, .7), 0px 0px 5px rgba(155, 155, 155, .8);
 }
 
 .separator:hover {
@@ -21,12 +21,12 @@
     text-transform: uppercase;
     font-weight: bold;
     background: rgba(255, 255, 255, 0.1);
-    cursor:pointer;
+
     /* box shadow*/
-    box-shadow: 0 0 1px rgba(255, 255, 255, .8) inset;
+    box-shadow: 0px 0px 1px rgba(255, 255, 255, .8) inset;
 
     /* text shadow*/
-    text-shadow: 0 0 30 rgba(255, 255, 255, .9);
+    text-shadow: 0px 0px 30px rgba(255, 255, 255, .9);
 }
 
 .separator:active {

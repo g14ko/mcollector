@@ -4,12 +4,12 @@
     <?php include 'header.tpl';?>
 </head>
 <body>
+<?php include 'js-vars.tpl';?>
 <div id="blackout"></div>
 <div id="wrapped">
     <div id="navigate"><?php echo $menu;?></div>
     <div id="aside"><?php echo $aside;?></div>
     <div id="main">
-        <?php include 'js-vars.tpl';?>
         <div id="content"><?php echo $content;?></div>
     </div>
 </div>

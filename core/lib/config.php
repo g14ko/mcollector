@@ -8,9 +8,10 @@ namespace lib;
 
 class Config
 {
+    // directory and file extension for config ini files
     const INI_DIR = 'config';
     const INI_EXT = '.ini';
-
+    // config names
     const SERVERS = 'servers';
     const LAYOUT = 'layout';
     const PAGE = 'page';
@@ -25,13 +26,12 @@ class Config
     const ASIDE = 'aside';
     const PARAMETERS = 'parameters';
     const XPATH = 'xpath';
-
+    // file names for configs
     private static $files = [
         'servers'    => self::SERVERS,
-        'styles'     => self::LAYOUT,
-        'scripts'    => self::LAYOUT,
-        'head'       => self::PAGE,
-        'refresh'    => self::PAGE,
+        'styles'     => self::PAGE,
+        'scripts'    => self::PAGE,
+        'vars'       => self::PAGE,
         'db'         => self::DB,
         'actions'    => self::ACTIONS,
         'select'     => self::SELECT,
@@ -43,107 +43,201 @@ class Config
         'parameters' => self::PARAMETERS,
         'xpath'      => self::XPATH,
     ];
-
-    private static $directory;
-    private static $file;
+    // current config
     private static $config;
+    // sub directory for current config
+    private static $subDirectory;
+    // file path for current config
+    private static $filepath;
 
+    /**
+     * Получить конфиг по заданному пути
+     *
+     * @param array $path Путь
+     * @return mixed Конфиг
+     */
     public static function get(array $path)
     {
         $config = strtolower(array_shift($path));
         return !self::init($config) ? null : self::extractData($config, $path);
     }
 
-    public static function issetSection(array $config, $section)
+    /**
+     * Инициализировать путь к конфигу и загрузить его
+     *
+     * @param string $name Название конфига
+     * @return bool Признак успешной инициализации и загрузки конфига
+     * <dl>
+     *  <dt>true</dt><dd>конфиг загружен</dd>
+     *  <dt>false</dt><dd>конфиг не загружен</dd>
+     * </dl>
+     */
+    private static function init($name)
     {
-        return isset(self::get($config)[$section]);
+        self::setSubDirectory($name);
+        return self::setFileName($name) && self::load();
     }
 
+    /**
+     * Задать поддиректорию для конфига
+     *
+     * @param string $name Название конфига
+     * @return void
+     */
+    private static function setSubDirectory(&$name)
+    {
+        if (strpos($name, '-') != false)
+        {
+            self::$subDirectory = explode('-', $name);
+            $name = array_pop(self::$subDirectory);
+            self::$subDirectory = implode(DIRECTORY_SEPARATOR, self::$subDirectory);
+        }
+        else
+        {
+            self::$subDirectory = null;
+        }
+    }
+
+    /**
+     * Задать путь к файлу для конфига
+     *
+     * @param string $name Название конфига
+     * @return string Название файла, если файл не найден - null
+     */
+    private static function setFileName($name)
+    {
+        return !isset(self::$files[$name]) ? null :
+            self::$filepath = self::getConfigDir() . self::getSubDirectory() . self::$files[$name] . self::INI_EXT;
+    }
+
+    /**
+     * Возвращает поддиректорию для текущего конфига
+     *
+     * @return string Поддиректория текущего конфига
+     */
+    private static function getSubDirectory()
+    {
+        return !self::$subDirectory ? null : self::$subDirectory . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * Возвращает директорию с конфигами
+     *
+     * @return string Директория где хранятся конфиги
+     */
+    private static function getConfigDir()
+    {
+        return self::getCoreDir() . self::INI_DIR . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * Возвращает директорию ядра проекта
+     *
+     * @return string Директория ядра проекта
+     */
+    private static function getCoreDir()
+    {
+        return realpath(__DIR__ . DIRECTORY_SEPARATOR . '..') . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * Загрузить конфиг
+     *
+     * @return bool Признак успешной загрузки конфига
+     * <dl>
+     *  <dt>true</dt><dd>конфиг загружен</dd>
+     *  <dt>false</dt><dd>конфиг не загружен</dd>
+     * </dl>
+     */
+    private static function load()
+    {
+        return self::isFileExists() && (bool)self::$config = self::parse(self::$filepath);
+    }
+
+    /**
+     * Проверка на существования файла с конфигом
+     *
+     * @return bool Провекра файла с конфигом
+     * <dl>
+     *  <dt>true</dt><dd>файла существует</dd>
+     *  <dt>false</dt><dd>файла не существует</dd>
+     * </dl>
+     */
+    private static function isFileExists()
+    {
+        return \file_exists(self::$filepath);
+    }
+
+    /**
+     * Разобрать файл с конфигом
+     *
+     * @return array Данные конфига
+     */
+    private static function parse()
+    {
+        return \parse_ini_file(self::$filepath, true);
+    }
+
+    /**
+     * Извлечь нужную часть конфига
+     *
+     * @param string $section Название конфига
+     * @param array  $sections Путь к нужной части конфига
+     * @return mixed Часть необходимого конфига, если конфиг или искомая секция не найдена - null
+     */
     private static function extractData($section, array $sections)
     {
-        self::setConfig($section, false);
+        self::setSectionAsConfig($section, false);
         if (!empty($sections))
         {
             foreach ($sections as $section)
             {
-                self::setConfig($section);
+                self::setSectionAsConfig($section);
             }
         }
         return self::getConfig();
     }
 
+    /**
+     * Задать секцию, как конфиг
+     *
+     * @param string $section Название секции
+     * @param bool   $clear Очистить конфиг, если секция не найдена
+     * <dl>
+     *  <dt>true</dt><dd>да, очистить конфиг</dd>
+     *  <dt>false</dt><dd>нет, оставить предыдущую секцию, как конфиг</dd>
+     * </dl>
+     * @return void
+     */
+    private static function setSectionAsConfig($section, $clear = true)
+    {
+        self::$config = !isset(self::$config[$section]) ? !$clear ? self::$config : [] : self::$config[$section];
+    }
+
+    /**
+     * Возвращает текущий конфиг
+     *
+     * @return mixed текущий конфиг, если текущий конфиг пустой - null
+     */
     private static function getConfig()
     {
         return !empty(self::$config) ? self::$config : null;
     }
 
-    private static function setConfig($key, $clear = true)
+    /**
+     * Задана ли секция в конфиге
+     *
+     * @param array  $config Путь к конфигу
+     * @param string $section Название секции
+     * @return bool Задана ли секция в конфиге
+     * <dl>
+     *  <dt>true</dt><dd>да</dd>
+     *  <dt>false</dt><dd>нет</dd>
+     * </dl>
+     */
+    public static function issetSection(array $config, $section)
     {
-        self::$config = !isset(self::$config[$key]) ? !$clear ? self::$config : [] : self::$config[$key];
-    }
-
-    private static function init($name)
-    {
-
-        return self::setSubDirectory($name) && self::setFileName($name) && self::setFilePath() && self::load();
-    }
-
-    private static function load()
-    {
-        return self::isFileExists() && self::$config = self::parse(self::$file);
-    }
-
-    private static function getSubDirectory()
-    {
-        return !self::$directory ? null : self::$directory . DIRECTORY_SEPARATOR;
-    }
-
-    private static function setSubDirectory(&$name)
-    {
-        if (strpos($name, '-') != false)
-        {
-            self::$directory = explode('-', $name);
-            $name = array_pop(self::$directory);
-            self::$directory = implode(DIRECTORY_SEPARATOR, self::$directory);
-        }
-        else {
-            self::$directory = null;
-        }
-        return true;
-    }
-
-    private static function setFileName($name)
-    {
-        if (!array_key_exists($name, self::$files))
-        {
-            return false;
-        }
-        return self::$file = self::$files[$name];
-    }
-
-    private static function setFilePath()
-    {
-        return self::$file = self::getConfigDir() . self::getSubDirectory() . self::$file . self::INI_EXT;
-    }
-
-    private static function isFileExists()
-    {
-        return file_exists(self::$file);
-    }
-
-    private static function parse()
-    {
-        return parse_ini_file(self::$file, true);
-    }
-
-    private static function getConfigDir()
-    {
-        return self::getRootDir() . self::INI_DIR . DIRECTORY_SEPARATOR;
-    }
-
-    private static function getRootDir()
-    {
-        return realpath(__DIR__ . DIRECTORY_SEPARATOR . '..') . DIRECTORY_SEPARATOR;
+        return isset(self::get($config)[$section]);
     }
 
 }

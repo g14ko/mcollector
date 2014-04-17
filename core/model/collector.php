@@ -13,6 +13,8 @@ use model\collector\server\System as system;
 
 class Collector extends model
 {
+    use \component\Model;
+
     const TABLE = 'collector';
 
     const START = 'start';
@@ -39,13 +41,6 @@ class Collector extends model
     public static function getOrder($for)
     {
         return [self::TABLE => self::config([$for, self::TABLE, self::ORDER])];
-    }
-
-    public static function getSelect($for, array $select = [])
-    {
-        $fields = self::config([$for, self::TABLE, self::SELECT]);
-        self::setChildSelect($for, self::$child, $select, $fields);
-        return array_merge(self::buildSelect(self::TABLE, $fields), $select);
     }
 
     public static function addUpdateTime(array $select, array $on)

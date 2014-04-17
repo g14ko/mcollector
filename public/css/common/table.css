@@ -1,0 +1,122 @@
+table {
+    overflow: hidden;
+    background: rgba(0, 0, 0, .03);
+    /* border */
+    border: 1px solid rgba(255, 255, 255, .3);
+    border-top-color: rgba(255, 255, 255, .7);
+    border-left-color: rgba(255, 255, 255, .7);
+    border-collapse: separate;
+    border-spacing: 1px 0px;
+    -moz-border-radius: 3px; /* FF1+ */
+    -webkit-border-radius: 3px; /* Saf3-4 */
+    border-radius: 3px;
+    /* shadow */
+    -moz-box-shadow: 0px 0px 7px rgba(0, 0, 0, .3), 0px 0px 100px rgba(0, 0, 0, .1) inset;
+    -webkit-box-shadow: 0px 0px 7px rgba(0, 0, 0, .3), 0px 0px 100px rgba(0, 0, 0, .1) inset;
+    box-shadow: 0px 0px 7px rgba(0, 0, 0, .3), 0px 0px 100px rgba(0, 0, 0, .1) inset;
+}
+
+th {
+    padding: 5px 15px;
+    text-transform: uppercase;
+    font-size: .9em;
+    color: rgba(255, 255, 255, .9);
+    /* box shadow */
+    -moz-box-shadow: 0px 0px 50px rgba(0, 0, 0, .1) inset;
+    -webkit-box-shadow: 0px 0px 50px rgba(0, 0, 0, .1) inset;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .3) inset, 0px 0px 10px rgba(255, 255, 255, .7) inset, 0px 0px 50px rgba(0, 0, 0, .2) inset;
+    /* text shadow*/
+    text-shadow: 0 0 3px rgba(155, 155, 155, .7), 0px 0px 5px rgba(155, 155, 155, .8);
+}
+
+th:first-letter {
+    font-size: 1.1em;
+}
+
+td:not(.separator) {
+    padding: 5px 8px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    border-bottom: 1px dotted rgba(0, 0, 0, .1);
+    background-color: rgba(255, 255, 255, .9);
+}
+
+td:first-child,
+th:first-child,
+th.process {
+    text-align: left;
+}
+
+td.server,
+td.process,
+td.file,
+td.filesystem,
+td.directory,
+td.host,
+td.parameter {
+    text-transform: uppercase;
+    font-size: .8em;
+}
+
+td.server:first-letter,
+td.process:first-letter,
+td.file:first-letter,
+td.filesystem:first-letter,
+td.directory:first-letter,
+td.host:first-letter {
+    font-size: 1.2em;
+}
+
+.inactive {
+    opacity: .4 !important;
+}
+
+th.actions, td.actions {
+    width: 60px;
+}
+
+a.action {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin: 0 2px;
+    outline: 0;
+}
+
+.action-wait {
+    background-image: url('../../img/wait.gif');
+}
+
+.monitor, .unmonitor {
+    opacity: .8;
+}
+
+.not-actual {
+    background-color: #ccff99;
+}
+
+td.status {
+    max-width: 120px;
+}
+
+span.status span:not(.bubble) {
+    text-shadow: 0 0 1px rgba(255, 255, 255, .7), 0 0 3px rgba(255, 255, 255, .3);
+}
+
+tr.warning {
+    color: rgba(255, 115, 5, .9);
+    background-color: rgba(255, 155, 5, .9);
+    text-shadow: 0 0 3px rgba(255, 255, 255, .9), 0 0 5px rgba(255, 255, 255, .9);
+}
+
+tr.alert {
+    color: rgba(255, 5, 5, .9);
+    background-color: rgba(255, 85, 85, .9);
+    text-shadow: 0 0 3px rgba(255, 255, 255, .9), 0 0 5px rgba(255, 255, 255, .9);
+}
+
+#services tr.header {
+    cursor:pointer;
+}

@@ -13,28 +13,21 @@ use \SimpleXMLElement as xml;
 
 class Port extends model
 {
+    use \component\Model;
+
+    const PARENT = 'host';
     const TABLE = 'port';
 
     private static $data = [];
 
     public static function save($id, xml $service)
     {
-        self::setId(self::$data, $id);
-        self::saveToDB(self::TABLE, self::getFields(self::SAVE, self::TABLE), self::extractByProperty(self::TABLE, $service), self::$data);
+        self::childSave($id, $service);
     }
 
-    public static function addSelect($for, array &$select)
+    public static function getSelect($for)
     {
-        $select = array_merge($select, self::getSelect($for));
-    }
-
-    private static function getSelect($for)
-    {
-        return self::buildSelect(
-                   self::TABLE,
-                   self::config([$for, self::TABLE, self::SELECT]),
-                   [[self::ID, host::TABLE, self::getNameId(self::TABLE)]]
-        );
+        return self::getChildSelect($for);
     }
 
 }

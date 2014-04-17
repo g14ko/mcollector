@@ -35,7 +35,7 @@ class Log
         self::unsetFileName();
         if (!empty($filename))
         {
-            self::$file = realpath(AutoLoader::getRootDirectory() . DIRECTORY_SEPARATOR . '..') .
+            self::$file = realpath(AutoLoader::getCoreDirectory() . DIRECTORY_SEPARATOR . '..') .
                 DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . $filename . '.log';
         }
         return self::issetFileName();

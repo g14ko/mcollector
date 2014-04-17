@@ -39,7 +39,7 @@ class Sqlite
 
     private static function getAbsoluteFilePath()
     {
-        return loader::getRootDirectory() . self::$directory . '/' . self::$file;
+        return loader::getCoreDirectory() . self::$directory . '/' . self::$file;
     }
 
     private static function openConnection()
